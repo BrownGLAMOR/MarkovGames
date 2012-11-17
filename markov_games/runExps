@@ -1,0 +1,166 @@
+# runExp(gametype, teamtype,numiter,3,alpha,epsilon, gamma,valiter,normgamma);
+#                       gametype, team  ,numiter, dbg,      alpha,epsilon, gamma,valiter,normgamma);
+matlab -nosplash -r "runExp('grid1', 'DELPEACE', 500000, 3,            1,   0.01,   0.9,      0,        0);quit;"
+
+matlab -nosplash -r "runExp('grid2', 'DELPEACE100', 500000, 3, [], 0.01, 0.9, 0, 0);dataset = {'grid2-PEACE-500000-uniformAlpha-eps_01'};plotRes;quit;"
+
+
+************************
+**** OLD CEQ Stuff
+************************
+matlab -nosplash -r "[t,g,on] = runExp('grid1', 'CC', 200000, 3, 1, 1, 0.9, 0, 0);plotRes({on},'grid',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid2', 'CC', 200000, 3, [], 1, 0.9, 0, 0);plotRes({on},'grid',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid3', 'CC', 200000, 3, 1, 1, 0.9, 0, 0);plotRes({on},'grid',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid1', 'CCl', 200000, 3, 1, 1, 0.9, 0, 0);plotRes({on},'grid',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid2', 'CCl', 200000, 3, [], 1, 0.9, 0, 0);plotRes({on},'grid',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid3', 'CCl', 200000, 3, 1, 1, 0.9, 0, 0);plotRes({on},'grid',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'CC',  200000, 3, [], 1, 0.9, 0, 0);plotRes({on},'soccer',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'CCl', 200000, 3, [], 1, 0.9, 0, 0);plotRes({on},'soccer',0);quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'MM', 200000, 3, [], 1, 0.9, 0, 0);plotRes({on},'soccer',0);quit;"
+
+************************
+****  PEACE, HMC, DELPEACE, DELHMC on grid and 2x2 soccer
+************************
+matlab -nosplash -r "[t,g,on] = runExp('grid1', 'PEACE', 1000000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid2', 'PEACE', 1000000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid3', 'PEACE', 1000000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'PEACE', 1000000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'soccer');quit;"
+
+matlab -nosplash -r "[t,g,on] = runExp('grid1', 'HMC', 1000000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid2', 'HMC', 1000000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid3', 'HMC', 1000000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'HMC', 1000000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'soccer');quit;"
+
+matlab -nosplash -r "[t,g,on] = runExp('grid1', 'DELPEACE200', 500000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid2', 'DELPEACE200', 500000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid3', 'DELPEACE200', 500000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'DELPEACE200', 500000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'soccer');quit;"
+# matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'DELPEACE200', 1000000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'soccer');quit;"
+
+matlab -nosplash -r "[t,g,on] = runExp('grid1', 'DELHMC200', 500000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid2', 'DELHMC200', 500000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('grid3', 'DELHMC200', 500000, 3, 1, 0.01, 0.9, 0, 0);plotRes({on},'grid');quit;"
+matlab -nosplash -r "[t,g,on] = runExp('soccer22ns', 'DELHMC200', 500000, 3, [], 0.01, 0.9, 0, 0);plotRes({on},'soccer');quit;"
+
+
+
+dataset = {'soccer22ns-DELHMC200-500000-uniformAlpha-eps_01', 'soccer22ns-DELPEACE200-500000-uniformAlpha-eps_01'};
+dataset = {'soccer22ns-HMC-1000000-uniformAlpha-eps_01'};
+dataset = {'soccer22ns-PEACE-1000000-uniformAlpha-eps_01'};
+
+plotRes(dataset,'soccer');
+
+dataset = {'grid1-DELHMC200-500000-alpha1-eps_01', 'grid1-DELPEACE200-500000-alpha1-eps_01'};
+dataset = {'grid1-HMC-1000000-alpha1-eps_01', 'grid1-PEACE-1000000-alpha1-eps_01'};
+dataset = {'grid2-DELHMC200-500000-uniformAlpha-eps_01', 'grid2-DELPEACE200-500000-uniformAlpha-eps_01'};
+dataset = {'grid2-HMC-1000000-uniformAlpha-eps_01', 'grid2-PEACE-1000000-uniformAlpha-eps_01'};
+dataset = {'grid3-DELHMC200-500000-alpha1-eps_01', 'grid3-DELPEACE200-500000-alpha1-eps_01'};
+dataset = {'grid3-HMC-1000000-alpha1-eps_01', 'grid3-PEACE-1000000-alpha1-eps_01'};
+
+plotRes(dataset,'grid');
+
+
+
+************************
+**** Table generation
+************************
+g13List = {'grid1','grid3'};
+g2List = {'grid2'};
+socList = {'soccer22ns'};
+nrTeams = {'PEACE','HMC'};
+delTeams = {'DELPEACE200','DELHMC200'};
+ccTeams = {'CC','CCl'};
+ceqTeams = {'CC','CCl','MM'};
+
+gentables('experiments/grid/', g13List, nrTeams, 1000000, 'grid', 'regular', 0,'-alpha1-eps_01');
+gentables('experiments/grid/', g13List, delTeams, 500000, 'grid', 'regular', 0,'-alpha1-eps_01');
+gentables('experiments/grid/', g13List, ccTeams,  200000, 'grid', 'regular', 0,'-alpha1-eps1');
+gentables('experiments/grid/', g2List, nrTeams, 1000000, 'grid', 'regular', 0,'-uniformAlpha-eps_01');
+gentables('experiments/grid/', g2List, delTeams, 500000, 'grid', 'regular', 0,'-uniformAlpha-eps_01');
+gentables('experiments/grid/', g2List, ccTeams,  200000, 'grid', 'regular', 0,'-uniformAlpha-eps1');
+
+
+gentables('experiments/soccer/', socList, nrTeams, 1000000, 'soccer', 'regular', 0,'-uniformAlpha-eps_01');
+gentables('experiments/soccer/', socList, delTeams, 500000, 'soccer', 'regular', 0,'-uniformAlpha-eps_01');
+gentables('experiments/soccer/', socList, ceqTeams,  200000, 'soccer', 'regular', 0,'-uniformAlpha-eps1');
+
+
+************************
+**** Testing
+************************
+loadExp     % preloads all the classes
+
+dataset = {'grid1-DELHMC200-500000-alpha1-eps_01', 'grid1-DELPEACE200-500000-alpha1-eps_01',...
+            'grid1-HMC-1000000-alpha1-eps_01', 'grid1-PEACE-1000000-alpha1-eps_01',...
+            'grid2-DELHMC200-500000-uniformAlpha-eps_01', 'grid2-DELPEACE200-500000-uniformAlpha-eps_01',...
+            'grid2-HMC-1000000-uniformAlpha-eps_01', 'grid2-PEACE-1000000-uniformAlpha-eps_01',...
+            'grid3-DELHMC200-500000-alpha1-eps_01', 'grid3-DELPEACE200-500000-alpha1-eps_01',...
+            'grid3-HMC-1000000-alpha1-eps_01', 'grid3-PEACE-1000000-alpha1-eps_01'};
+location = 'experiments/grid/'
+type = 'grid';
+dataset = {'grid1-CC-200000-alpha1-eps1','grid1-CCl-200000-alpha1-eps1'};
+dataset = {'grid3-CC-200000-alpha1-eps1','grid3-CCl-200000-alpha1-eps1'};
+dataset = {'grid2-CC-200000-uniformAlpha-eps1','grid2-CCl-200000-uniformAlpha-eps1'};
+
+dataset = {'soccer22ns-MM-200000-uniformAlpha-eps1'};
+dataset = {'soccer22ns-CC-200000-uniformAlpha-eps1', 'soccer22ns-CCl-200000-uniformAlpha-eps1'};
+dataset = {'soccer22ns-DELHMC200-500000-uniformAlpha-eps_01', 'soccer22ns-DELPEACE200-500000-uniformAlpha-eps_01', ...
+            'soccer22ns-HMC-1000000-uniformAlpha-eps_01', 'soccer22ns-PEACE-1000000-uniformAlpha-eps_01'};
+location = 'experiments/soccer/'
+type = 'soccer';
+
+
+runPlotTest(dataset, type, location, 10000);
+
+runPlotTest(dataset, type, location, 10000,0,0);
+
+
+dataset = {'grid1-DELHMC200-10000-TEST', 'grid1-DELPEACE200-10000-TEST',...
+            'grid1-HMC-10000-TEST', 'grid1-PEACE-10000-TEST',...
+            'grid2-DELHMC200-10000-TEST', 'grid2-DELPEACE200-10000-TEST',...
+            'grid2-HMC-10000-TEST', 'grid2-PEACE-10000-TEST',...
+            'grid3-DELHMC200-10000-TEST', 'grid3-DELPEACE200-10000-TEST',...
+            'grid3-HMC-10000-TEST', 'grid3-PEACE-10000-TEST'};
+dataset = {'grid1-CC-10000-TEST','grid1-CCl-10000-TEST',...
+            'grid3-CC-10000-TEST','grid3-CCl-10000-TEST',...
+            'grid2-CC-10000-TEST','grid2-CCl-10000-TEST'};
+location = 'experiments/grid/'
+type = 'grid';
+
+
+dataset = {'soccer22ns-DELHMC200-10000-TEST', 'soccer22ns-DELPEACE200-10000-TEST', ...
+           'soccer22ns-HMC-10000-TEST', 'soccer22ns-PEACE-10000-TEST'};
+dataset = {'soccer22ns-MM-10000-TEST', 'soccer22ns-CC-10000-TEST', 'soccer22ns-CCl-10000-TEST'};
+location = 'experiments/soccer/'
+type = 'soccer';
+
+
+plotRes(dataset,type);
+plotRes(dataset,type, 0, 0);
+
+************************
+**** Comparing Q-values
+************************
+loadExp
+
+g1CCset = {'grid1-CC-200000-alpha1-eps1','grid1-CCl-200000-alpha1-eps1'};
+g2CCset = {'grid2-CC-200000-uniformAlpha-eps1','grid2-CCl-200000-uniformAlpha-eps1'};
+g3CCset = {'grid3-CC-200000-alpha1-eps1','grid3-CCl-200000-alpha1-eps1'};
+socCCset= {'soccer22ns-CC-200000-uniformAlpha-eps1', 'soccer22ns-CCl-200000-uniformAlpha-eps1',...
+           'soccer22ns-MM-200000-uniformAlpha-eps1'};
+
+g1NRset = {'grid1-DELHMC200-500000-alpha1-eps_01', 'grid1-DELPEACE200-500000-alpha1-eps_01',...
+            'grid1-HMC-1000000-alpha1-eps_01', 'grid1-PEACE-1000000-alpha1-eps_01'};
+g2NRset = {'grid2-DELHMC200-500000-uniformAlpha-eps_01','grid2-DELPEACE200-500000-uniformAlpha-eps_01',...
+            'grid2-HMC-1000000-uniformAlpha-eps_01', 'grid2-PEACE-1000000-uniformAlpha-eps_01'};
+g3NRset = {'grid3-DELHMC200-500000-alpha1-eps_01','grid3-DELPEACE200-500000-alpha1-eps_01',...
+            'grid3-HMC-1000000-alpha1-eps_01', 'grid3-PEACE-1000000-alpha1-eps_01'};
+socNRset = {'soccer22ns-DELHMC200-500000-uniformAlpha-eps_01',...
+             'soccer22ns-DELPEACE200-500000-uniformAlpha-eps_01', ...
+             'soccer22ns-HMC-1000000-uniformAlpha-eps_01',...
+             'soccer22ns-PEACE-1000000-uniformAlpha-eps_01'};
+
+g1diff = compq(g1CCset,g1NRset,'grid');
+g2diff = compq(g2CCset,g2NRset,'grid');
+g3diff = compq(g3CCset,g3NRset,'grid');
+socdiff = compq(socCCset,socNRset,'soccer');

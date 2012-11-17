@@ -1,0 +1,6 @@
+First run make in lp_solve_3.2/
+
+Then run the mex compiler:
+$MATLABDIR/bin/mex -O -v lpmex.c -I../lp_solve_3.2 ../lp_solve_3.2/liblpk.a -ll -lm
+
+

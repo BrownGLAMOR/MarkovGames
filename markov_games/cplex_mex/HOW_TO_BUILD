@@ -1,0 +1,6 @@
+# on sun
+/pro/matlab5/bin/mex -O -I/com/cplex -L/com/cplex -lcplex -v lp_cplex_mex.c
+/pro/matlab5/bin/mex -O -I/com/cplex -L/com/cplex -lcplex -v qp_cplex_mex.c
+
+# on linux
+/cfarm/matlab/bin/mex -O -I/com/cplex/include/ilcplex -L/com/cplex/lib/i86_linux2_glibc2.2_gcc3.0/static_mt -lcplex -v lp_cplex_mex.c

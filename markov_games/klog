@@ -1,0 +1,392 @@
+Log File for Keith
+----------------------------------------------------------------------------------
+*******************************************************************************
+***** Plotting sets of results
+*******************************************************************************
+gengset('experiments/grid/', {'grid1','grid3'}, {'CC-200000-NG-alpha1-eps1','CCe-200000-NG-alpha1-eps1','CCr-200000-NG-alpha1-eps1','CCl-200000-NG-alpha1-eps1'}, {'uCE-Q','eCE-Q','pCE-Q','dCE-Q'}, 200000, 'grid',0, 1000, {'max','maxslide', 'mean','meanback'}, 'graphSetCE');
+
+***** Looking at a particular state/action pair
+qh1 = load('experiments/grid/grid1-CCe-200000-VI-NG-alpha1-eps1-qhist1.txt');
+[Ag,AgI,Ac,AcI] = filterStateAction(qh2,[3,3,3,3]);
+[Ag,AgI,Ac,AcI] = filterStateAction(qh1,[3,3,3,3]);
+cell = sub2ind([3,3,3,3],3,3,1,3)
+    plot(Ag{cell}(:,9))
+    plot(AgI{cell},Ag{cell}(:,9))
+    cell = sub2ind([3,3,3,3],3,2,1,2)
+    plot(AgI{cell},Ag{cell}(:,9))
+    cell = sub2ind([3,3,3,3],2,3,1,2)
+    plot(AgI{cell},Ag{cell}(:,9))
+    setLabel
+    axis
+    axis([0,150000,-.01,.05])
+    axis([0,1500000,-.01,.05])
+    axis([0,15000000,-.01,.05])
+    axis([0,1500000,-.01,.05])
+    print -deps 'experiments/grid/grid1-eCE-VI-2312_new.eps'
+    print -deps 'experiments/grid/graphs/grid1-eCE-VI-2312_new.eps'
+
+
+*******************************************************************************
+***** (shell) Running no-regret experiments on grid games
+*******************************************************************************
+matlab -nosplash -r "runExp('grid1', 'DELPEACE10', 500000, 3,            1,   0.01,   0.9,      0,        0);quit;"
+matlab -nosplash -r "runExp('grid2', 'DELPEACE100', 500000, 3, [], 0.01, 0.9, 0, 0);dataset = {'grid2-PEACE-500000-uniformAlpha-eps_01'};plotRes(dataset, 'grid');quit;"
+
+*******************************************************************************
+**** Plotting Regrets and Frequencies!!!
+*******************************************************************************
+stateDims = [3,3,3,3];
+stateToPlot= {3,1,1,1};
+goodMoves = {[2,3,[1,3]};
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+[Ag1, AgInd1, Ac1, AcInd1] = filterStateAction(qh1, stateDims);
+[Ag2, AgInd2, Ac2, AcInd2] = filterStateAction(qh2, stateDims);
+plotStateAction(AgInd1,Ac1,AcInd1,[3,3,3,3],{3,1,1,1},8, [0,1],'transpose',goodMoves, {{'P1Center','P1Side'},{'P2Center', 'P2Side'}});
+plotStateAction(AgInd2,Ac2,AcInd2,[3,3,3,3],{3,1,1,1},8, [0,1],'no',goodMoves, {{'P1Center','P1Side'},{'P2Center', 'P2Side'}});
+plotRegState({Ag1,Ag2},AcInd1,stateDims,stateToPlot,goodMoves,{'P1:Center','P1:Side','P2:Center','P2:Side'});
+plotFreqState({Ag1,Ag2},{AgInd1,AgInd2},{AcInd1, AcInd2},stateDims,stateToPlot,goodMoves,{'P1:Center','P1:Side','P2:Center','P2:Side'},100) 
+
+
+% or you can use plotRes.m
+dataset = {'soccer22ns-DELHMC200-500000-uniformAlpha-eps_01', 'soccer22ns-DELPEACE200-500000-uniformAlpha-eps_01'};
+plotRes(dataset,'soccer');
+
+g13List = {'grid1','grid3'};
+g2List = {'grid2'};
+socList = {'soccer'};
+nrTeams = {'PEACE','HMC'};
+delTeams = {'DELPEACE200','DELHMC200'};
+ccTeams = {'CC','CCl'};
+
+gentables('experiments/grid/', g13List, nrTeams, 1000000, 'grid', 'regular', 0,'-alpha1-exp_01');
+gentables('experiments/grid/', g13List, delTeams, 500000, 'grid', 'regular', 0,'-alpha1-exp_01');
+gentables('experiments/grid/', g13List, ccTeams,  200000, 'grid', 'regular', 0,'-alpha1-exp_01');
+gentables('experiments/soccer/', gameList, teamList, numIter, theGameType, gammaType, pEps, expStr)
+
+
+
+******************************************************************************
+**** Comparing q-values at a state
+******************************************************************************
+% diffs is a cellarray, 1 cell for every reference table
+% diffs{i} is a matrix, nX2, n = number of comparison tables (columns are transposes)
+diffs = compq({'grid2-CC-200000-uniformAlpha-eps1'},{'grid2-CCl-200000-uniformAlpha-eps1'},'grid');
+
+
+******************************************************************************
+*** Runing an experiment:
+******************************************************************************
+[teams,game,oName] = 
+ runExp(Game,Player,NumIter,Debug,Alpha,Eps,Gamma,ValIter,NormGamma,PolicyHist);
+
+ex:
+gametype = 'Sexes';
+gamma = .25;
+normgamma = 1;
+teamtype = 'CC';
+valiter = 0;
+numiter = 1000;
+perturbEps = .001;
+[teams,game,oName] = runExp(gametype,teamtype,numiter,3,1,1,gamma,valiter,normgamma,1, perturbEps);
+
+---- Loading History Files:
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+
+---- Plotting State/Action for one state:
+figure;
+[Ag, AgInd, Ac, AcInd] = filterStateAction(qh1, 1);
+plotStateAction(AgInd,Ac,AcInd,[1],{1},4);
+figure;
+[Ag, AgInd, Ac, AcInd] = filterStateAction(qh2, 1);
+plotStateAction(AgInd,Ac,AcInd,[1],{1},4);
+
+---- Plotting State (all actions on same axis)
+figure;
+[Ag, AgInd, Ac, AcInd] = filterStateAction(qh1, stateDims);
+plotStates(Ag, AgInd, [1], plotCol, numPoints);
+figure;
+[Ag, AgInd, Ac, AcInd] = filterStateAction(qh2, stateDims);
+plotStates(Ag, AgInd, [1], plotCol, numPoints);
+
+
+******************************************************************************
+** Repeated Game & plot
+******************************************************************************
+
+% -----------------------------
+% General settings 
+% -----------------------------
+gamma = .25;
+normgamma = 1;
+valiter = 0;
+numiter = 1000;
+perturbEps = 0;
+
+% perturbEps = .001;
+% -----------------------------
+% looping over experiment lists
+% -----------------------------
+teamList= {'CC','CCr','CCe','CCl','CClax'};
+gameList = {'Pennies','Coordination','Sexes','Chicken'};
+
+for t = 1:size(teamList,2)
+    teamtype = teamList{t};
+    for g = 1:size(gameList,2)
+        gametype = gameList{g};
+        [teams,game,oName]=runExp(gametype, teamtype,numiter,3,1,1,gamma,valiter,normgamma,1, perturbEps);
+    end
+end
+
+
+% -----------------------------
+% sinlge play
+% -----------------------------
+gametype = 'Pennies';
+teamtype = 'CC';
+
+[teams,game,oName]=runExp(gametype, teamtype,numiter,4,1,1,gamma,valiter,normgamma,1);
+
+
+% -----------------------------
+% no-regret version
+% -----------------------------
+gametype = 'Pennies';
+teamtype = 'PEACE';
+[teams,game,oName]=runExp(gametype, teamtype,numiter,4,1,1,gamma,valiter,normgamma);
+
+******************************************************************************
+****  loading and filtering data
+******************************************************************************
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+figure;
+[Ag, AgInd, Ac, AcInd] = filterStateAction(qh1, 1);
+plotStateAction(AgInd,Ac,AcInd,[1],{1},4);
+figure;
+[Ag, AgInd, Ac, AcInd] = filterStateAction(qh2, 1);
+plotStateAction(AgInd,Ac,AcInd,[1],{1},4);
+
+******************************************************************************
+****   Running exp mult times both Value iteration and Q-learning (stores results)
+******************************************************************************
+numiter = 5;
+QvalList = zeros(numiter,8);
+VvalList = zeros(numiter,8);
+QpolList = zeros(numiter,8);
+VpolList = zeros(numiter,8);
+for iter = 1:numiter
+    disp(['*** Running experiment # ', int2str(iter)]);
+    %Q-style
+    valiter = 0;
+    [teams,game,oName]=runExp(gametype, teamtype,1000,3,1,1,gamma,valiter,normgamma,1);
+    p1 = squeeze(get(teams{1}, 'Policy'))';
+    p2 = squeeze(get(teams{2}, 'Policy'));
+    QpolList(iter,:) = [reshape(p1,1,4) reshape(p2,1,4)];
+    q1 = squeeze(get(teams{1}, 'QTable'))';
+    q2 = squeeze(get(teams{2}, 'QTable'));
+    QvalList(iter,:) = [reshape(q1,1,4) reshape(q2,1,4)];
+    %Valuation-iter
+    valiter = 1;
+    [teams,game,oName]=runExp(gametype, teamtype,1000,3,1,1,gamma,valiter,normgamma,1);
+    p1 = squeeze(get(teams{1}, 'Policy'))';
+    p2 = squeeze(get(teams{2}, 'Policy'));
+    VpolList(iter,:) = [reshape(p1,1,4) reshape(p2,1,4)];
+    q1 = squeeze(get(teams{1}, 'QTable'))';
+    q2 = squeeze(get(teams{2}, 'QTable'));
+    VvalList(iter,:) = [reshape(q1,1,4) reshape(q2,1,4)];
+end
+
+
+******************************************************************************
+**** Markov game experiments
+******************************************************************************
+
+%% normgamma = 1;  % should not make a difference - normgamma is easier to read
+%% gamma = .9;  % typically .9 since the end of the game is most important
+%% epsilon = 1;
+%% valiter = 0; % should be off always for markov games !!!
+%% alpha = [];  % alpha is uniform 1/iter, iter is num times state was visited
+%% alpha = [.5]; % a fixed alpha value
+%% alpha = [1,.001]; % exponential decay over all iters (not per-state)
+%% alpha = [1,.001,2500]; % above, but per state. last elm is avg (iter/state)/exp
+
+
+gametype = 'grid1';
+teamtype = 'CC';
+numiter = 200000;
+alpha = [1];  % for GG1 and GG3
+% alpha = [1,.001,700];  % for GG2 at 200k iter
+
+normgamma = 1;  % should not make a difference - normgamma is easier to read
+gamma = .9;  % typically .9 since the end of the game is most important
+epsilon = 1;
+valiter = 0; % should be off always for markov games !!!
+[teams,game,oName]=runExp(gametype, teamtype,numiter,3,alpha,epsilon, gamma,valiter,normgamma,1);
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+
+
+qt1 = get(teams{1},'QTable');
+qt2 = get(teams{2},'QTable');
+p1 = get(teams{1},'Policy');
+p2 = get(teams{2},'Policy');
+
+squeeze(qt1(3,1,1,1,:,:))'
+squeeze(qt2(3,1,1,1,:,:))
+
+
+% for ce policies
+squeeze(p1(3,1,1,1,:,:))'
+
+% for Nash policies
+squeeze(p1{1}(3,1,1,1,:,:))'
+squeeze(p1{2}(3,1,1,1,:,:))'
+squeeze(p2{1}(3,1,1,1,:,:))'
+squeeze(p2{2}(3,1,1,1,:,:))'
+
+
+******************************************************************************
+**** plotting data
+******************************************************************************
+-- plots of constraint space for 2x2 games
+
+-- chicken from our paper:
+[x,y,z] = meshgrid(0:.01:1,0:.01:1,0:.01:1);   
+v = (-x+2*y >= 0 & 2*x+2*y+3*z-2 >= 0 & -x + 2*z >=0 & 2*x + 3*y + 2*z - 2 >= 0 & x+y+z <= 1);   
+% isovalue should be more like .5, but i use 0
+p = patch(isosurface(x,y,z,v,.5), 'FaceColor','red','EdgeColor','none');    
+isonormals(x,y,z,v,p);   
+view(3)
+camlight
+lighting phong
+
+print -depsc chicken_const_101pt.eps
+
+
+******************************************************************************
+****  plotting data and constraint spaces from qhist
+******************************************************************************
+% -----------------------------------
+% loading data, generating qlist (qtable policy V)
+% -----------------------------------
+%qh1
+%qh2
+% qh1 should be a single state's data
+
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+numAction = 2;
+statelen = 1;
+valiter = 0;
+qlist1 = accumQvals(qh1, numAction, statelen, valiter);
+qlist2 = accumQvals(qh2, numAction, statelen, valiter);
+
+iterlist = [10:30];
+
+% -----------------------------------
+% plot the constraint space for given iterations 2x2 only!!!
+% -----------------------------------
+for i = iterlist
+    figure;
+    plotCEconstraint(reshape(qlist1(i,1:4), 2,2), reshape(qlist2(i,1:4),2,2)');
+    eval(['title(''iteration # ', num2str(i), ''')']);
+    %axis([0 1 0 1 0 1]);
+end
+
+% -----------------------------------
+% plot the constraint space and uCE solution given iterations 2x2 only!!!
+% -----------------------------------
+for i = iterlist
+    figure;
+    plotCEconstraint(reshape(qlist1(i,1:4), 2,2), reshape(qlist2(i,1:4),2,2)');
+    hold
+    plot3(qlist1(i+1,5), qlist1(i+1,7), qlist1(i+1,6), 'b*');
+    hold
+    eval(['title(''iteration # ', num2str(i), ''')']);
+    %axis([0 1 0 1 0 1]);
+end
+
+% -----------------------------------
+% plot the constraint space and uCE solution given iterations 2x2 only!!!
+% plot on same graph with different colors
+% -----------------------------------
+colorlist = {'red','green','blue'};
+iterlist = [5,10,15];
+figure;
+hold;
+h = [];
+p = [];
+l = cell(size(iterlist));
+for i = 1:length(iterlist)
+    iter = iterlist(i);
+    [v, p] = plotCEconstraint(reshape(qlist1(iter,1:4), 2,2), ...
+                                 reshape(qlist2(iter,1:4),2,2)', colorlist{i});
+    h = [h p];
+    plot3(qlist1(iter+1,5), qlist1(iter+1,7), qlist1(iter+1,6), 'bo', ...
+         'MarkerSize', 20, 'MarkerEdgeColor','black', 'MarkerFaceColor',colorlist{i});
+    l{i} = ['iteration # ', num2str(iterlist(i))];
+    %axis([0 1 0 1 0 1]);
+end
+eval(['legend(h,''', l{1}, ''',''', l{2},''',''', l{3},''');']);
+grid on;
+box on;
+hold;
+
+iterlist = [1:10];
+gameName = gametype;
+
+% -----------------------------------
+% Following a policy in 3-d (from a qlist1)
+% -----------------------------------
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+numAction = 2;
+statelen = 1;
+valiter = 0;
+qlist1 = accumQvals(qh1, numAction, statelen, valiter);
+qlist2 = accumQvals(qh2, numAction, statelen, valiter);
+figure;
+plot3(qlist1(iterlist,5), qlist1(iterlist,7), qlist1(iterlist,6), 'b--+');
+hold
+plot3(qlist1(iterlist(1),5), qlist1(iterlist(1),7), qlist1(iterlist(1),6), 'kd', 'MarkerFaceColor','g', 'MarkerSize', 10);
+plot3(qlist1(iterlist(end),5), qlist1(iterlist(end),7), qlist1(iterlist(end),6), 'ko', 'MarkerFaceColor', 'g', 'MarkerSize', 10);
+hold
+eval(['title(''', gametype, ' - Iterations ', num2str(iterlist(1)), '-', num2str(iterlist(end)), ''', ''FontSize'', 20)']);
+
+% -----------------------------------
+% Generating a set of graphs 
+% -----------------------------------
+gengraphs('experiments/Repeated/',{'Pennies','Chicken'},{'CC','CoordNash'},{'uCE','CoordinatedNash'});
+
+gengraphs('experiments/Repeated/',{'Coordination','Pennies','Chicken','Sexes'},{'CCl','CCr','CCe','CClax','CC','BestNash','CoordNash'},{'libCE','repubCE','egalCE','laxCE','utilCE','BestNash','CoordinatedNash'});
+
+% with perturb eps (delta)
+gengraphs('experiments/Repeated/',{'Coordination','Pennies','Chicken','Sexes'},{'CCl','CCr','CCe','CClax','CC','BestNash','CoordNash'},{'libCE','repubCE','egalCE','laxCE','utilCE','BestNash','CoordinatedNash'},[10:100],0,1000,0,.001);
+
+gengraphs('experiments/Repeated/',{'Coordination','Chicken','Sexes', 'Pennies'},{'CCl','CCr','CCe','CClax','CC'},{'libCE','repubCE','egalCE','laxCE','utilCE'},[10:10000],0,10000,0,.001);
+
+% --------------------------
+%  all-state convergence graphs
+% --------------------------
+oName = 'experiments/grid/grid2-CCr-200000-NG-uniformAlpha-eps1';
+qh1 = load(strcat(oName,'-qhist1.txt'));
+qh2 = load(strcat(oName,'-qhist2.txt'));
+plotScale = 1000;
+numIter = 200000;
+cv1 = convinfo(qh1, numIter, 9, plotScale, 'max');
+cv2 = convinfo(qh2, numIter, 9, plotScale, 'max');
+iterPerPoint = numIter / plotScale;
+
+plotFrom = 1;
+plotTo = 100000;
+plotFromPoint = ceil(plotFrom / iterPerPoint);
+plotToPoint = ceil(plotTo / iterPerPoint);
+plot(iterPerPoint * [plotFromPoint:plotToPoint], cv1(plotFromPoint:plotToPoint), 'r-', iterPerPoint * [plotFromPoint:plotToPoint], cv2(plotFromPoint:plotToPoint), 'b-.');
+
+plotFrom = 10000;
+plotTo = 200000;
+plotFromPoint = ceil(plotFrom / iterPerPoint);
+plotToPoint = ceil(plotTo / iterPerPoint);
+plot(iterPerPoint * [plotFromPoint:plotToPoint], cv1(plotFromPoint:plotToPoint), 'r-', iterPerPoint * [plotFromPoint:plotToPoint], cv2(plotFromPoint:plotToPoint), 'b-.');
