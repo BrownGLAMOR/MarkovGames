@@ -160,8 +160,17 @@ for iteration = 1:simul.numIter
         history(stateLen + 4) = score(2);
         history(stateLen + 5) = gameVals(1);
         history(stateLen + 6) = gameVals(2);
-        fprintf(histFID, '%15.5e ', history);
-        fprintf(histFID, '\n');
+        % @betsy and @sodomka hack
+        if length(histFID) == 1
+            fprintf(histFID, '%15.5e ', history);
+            fprintf(histFID, '\n');
+        else
+            fprintf(histFID(1), '%15.5e ', history(1,:));
+            fprintf(histFID(1), '\n');
+            
+            fprintf(histFID(2), '%15.5e ', history(2,:));
+            fprintf(histFID(2), '\n');
+        end
     end
 
     %-----------

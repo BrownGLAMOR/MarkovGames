@@ -1,8 +1,8 @@
 # runExp(gametype, teamtype,numiter,3,alpha,epsilon, gamma,valiter,normgamma);
 #                       gametype, team  ,numiter, dbg,      alpha,epsilon, gamma,valiter,normgamma);
-matlab -nosplash -r "runExp('grid1', 'DELPEACE', 500000, 3,            1,   0.01,   0.9,      0,        0);quit;"
+#matlab -nosplash -r "runExp('grid1', 'DELPEACE200', 500000, 3,            1,   0.01,   0.9,      0,        0);quit;"
 
-matlab -nosplash -r "runExp('grid2', 'DELPEACE100', 500000, 3, [], 0.01, 0.9, 0, 0);dataset = {'grid2-PEACE-500000-uniformAlpha-eps_01'};plotRes;quit;"
+#matlab -nosplash -r "runExp('grid2', 'DELPEACE100', 500000, 3, [], 0.01, 0.9, 0, 0);dataset = {'grid2-PEACE-500000-uniformAlpha-eps_01'};plotRes;quit;"
 
 
 ************************
