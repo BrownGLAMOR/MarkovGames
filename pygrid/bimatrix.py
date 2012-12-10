@@ -47,7 +47,7 @@ class Bimatrix:
 		max_val = float("-inf")
 		max_key = ""
 		for key in coopMat:
-			if(coopMat[max_key] > max_val):
+			if(coopMat[key] > max_val):
 				max_key = key
 				max_val = coopMat[max_key]
 		return max_key	

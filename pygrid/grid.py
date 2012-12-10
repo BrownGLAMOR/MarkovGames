@@ -1,8 +1,10 @@
+import numpy
 import bimatrix
 import gridsquare
 import gridstate
 class Grid:
 	def __init__(self,filepath):
+		print("loading from "+filepath)
 		self.load(filepath)
 		
 	# load (filepath: string) -> void
@@ -13,21 +15,27 @@ class Grid:
 		_height=0
 		references={}
 		for line in f:
-			if(line=="END"): break
+			if(line=="END\n"): break
 			_height+=1
-			_width=len(line)
+			_width=len(line.rstrip())
 		self.height = _height
 		self.width = _width
 		self.squares = [[gridsquare.GridSquare(i,j) for j in range(0,_height)] for i in range(0,_width)]
 		squareInfo=False
 		currLine=0
+		f.close()
+		f = open(filepath, 'r')
 		for line in f:
+			line = line.rstrip()
 			if(squareInfo==True):
 				ident=line.split(":")[0]
 				info=line.split(":")[1]
 				if ident=="stepcost":
 					self.stepcost = float(info)
 				else:
+					settings=[s.split("=")[0] for s in info.split(";")]
+					if "start_a" in settings: self.start_a = references[ident]
+					elif "start_b" in settings: self.start_b = references[ident]
 					references[ident].setInfo(info)
 			elif(squareInfo==False):
 				if(line=="END"):
@@ -35,9 +43,10 @@ class Grid:
 					continue
 				else:
 					for i in range(0, len(line)):
-						if(line[i]=="X"): self.squares[currLine][i].reachable=False
-						elif(line[i]!="N"): references[char]=self.squares[currLine][i]
-						self.squares[currLine][i].pos = (currLine,i)
+						if(line[i]=="X"): self.squares[i][currLine].reachable=False
+						elif(line[i]!="N"): references[line[i]]=self.squares[i][currLine]
+						self.squares[i][currLine].pos = (i,currLine)
+			currLine += 1
 	#
 	# getSquare (int,int) -> GridSquare
 	# returns the GridSquare at the given coordinates
@@ -61,7 +70,7 @@ class Grid:
 		ret = []
 		for x in range(0, self.width):
 			for y in range(0, self.height):
-				if(self.squares[x][y].reachable == True): ret.append(self.square[x][y])
+				if(self.squares[x][y].reachable == True): ret.append(self.squares[x][y])
 		return ret
 	#
 	# allStates () -> list of GridState
@@ -71,8 +80,8 @@ class Grid:
 		squares = self.reachableSquares()
 		for square1 in squares:
 			for square2 in squares:
-				if square1.pos != square2.pos: 
-					states.append(GridState(square1.pos,square2.pos,self))
+				if not numpy.array_equal(square1.pos, square2.pos): 
+					states.append(gridstate.GridState(square1.pos,square2.pos,self))
 		return states
 	#
 	
