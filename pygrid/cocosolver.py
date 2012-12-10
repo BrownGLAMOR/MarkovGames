@@ -22,7 +22,7 @@ class CocoSolver:
 			allStates = self.grid.allStates()
 			for st in allStates:
 				argmaxmaxA = st.bimatrix(self.V).coopAction()
-				newV[(st.getPosA(),st.getPosB())] = numpy.array([self.grid.stepcost,self.grid.stepcost]) + st.expectedReward(argmaxmaxA) + self.gamma*st.expectedValue(argmaxmaxA, self.V)
+				newV[(st.getPosA(),st.getPosB())] = numpy.array([self.grid.stepcost,self.grid.stepcost]) + st.expectedReward(argmaxmaxA) + self.gamma*st.expectedCocoValue(argmaxmaxA, self.V)
 				self.P[(st.getPosA(), st.getPosB())] = argmaxmaxA
 			self.V = newV
 	#
@@ -34,6 +34,7 @@ class CocoSolver:
 			print currState.toString()
 			policy = self.P[(currState.getPosA(), currState.getPosB())]
 			currState = currState.nextState(policy[0],policy[1])
+			print "I think the value of the current state is "+str(self.V[(currState.getPosA(), currState.getPosB())])
 			
 			
 	

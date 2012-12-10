@@ -104,6 +104,15 @@ class GridState:
 			ret.append((self.rawNextState("stay",a[1]), (1.0-probA)*probB))
 		return ret
 	#
+	# expectedCocoValue(string tuple, (V: dict from (numpy.array([int,int]), numpy.array([int,int])) to numpy.array([float,float])) -> (float,float)
+	# returns the expected coco value from taking the two given actions using the state value "guesses" given in V
+	def expectedCocoValue(self, actions, V):
+		possibleStates = self.possibleResultantStates(actions)
+		val = numpy.array([0,0])
+		for i in possibleStates:
+			if numpy.array_equal(i[0].posA, i[0].posB): val += i[1]*self.bimatrix(V).cocoVal()
+			else: val += i[1]*i[0].bimatrix(V).cocoVal()
+		return val
 	# expectedValue(string tuple, (V: dict from (numpy.array([int,int]), numpy.array([int,int])) to numpy.array([float,float])) -> (float,float)
 	# returns the expected value from taking the two given actions using the state value "guesses" given in V
 	def expectedValue(self, actions, V):

@@ -15,14 +15,14 @@ class Bimatrix:
 	# any action pair that has a chance of the agents running into each other is given
 	#	coco value (-inf, -inf) because we just never want that to happen.
 	# it's stored in a dict accessible by action tuples
-	def __init__(self):
-		self.entries={}
-		for a1 in ["up","down","left","right","stay"]:
-			for a2 in ["up","down","left","right","stay"]:
-				self.entries[(a1,a2)] = numpy.array([0.0,0.0])
-	
-	def __init__(self, _entries):
-		self.entries = _entries
+	def __init__(self, _entries=None):
+		if(_entries == None):
+			self.entries={}
+			for a1 in ["up","down","left","right","stay"]:
+				for a2 in ["up","down","left","right","stay"]:
+					self.entries[(a1,a2)] = numpy.array([0.0,0.0])
+		else:
+			self.entries = _entries
 	
 	# coopVal() -> (float,float)
 	# gives the cooperative (i.e. max-max of the cooperative matrix) value of the bimatrix
@@ -33,7 +33,7 @@ class Bimatrix:
 		max_val = float("-inf")
 		max_key = ""
 		for key in coopMat:
-			if(coopMat[max_key] > max_val):
+			if(coopMat[key] > max_val):
 				max_key = key
 				max_val = coopMat[max_key]
 		return max_val
@@ -58,7 +58,7 @@ class Bimatrix:
 		compMat = {}
 		for key in self.entries:
 			tmp = (self.entries[key][0] - self.entries[key][1])/2.0
-			coopMat[key] = (tmp,-tmp)
+			compMat[key] = (tmp,-tmp)
 		actionA = ""
 		rowRewards = {}
 		for a in ["up","down","left","right","stay"]:

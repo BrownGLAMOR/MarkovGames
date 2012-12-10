@@ -4,7 +4,7 @@ import gridsquare
 import bimatrix
 import cocosolver
 
-ITERATIONS=2
+ITERATIONS=5
 def main():
 	print "loading grid"
 	testgrid = grid.Grid("test.grid")
@@ -16,7 +16,7 @@ def main():
 	solver.iterateV(ITERATIONS)
 	print "done iterating"
 	print "printing trajectory"
-	solver.printP(20)
+	solver.printP(50)
 
 if __name__ == "__main__":
 	main()
