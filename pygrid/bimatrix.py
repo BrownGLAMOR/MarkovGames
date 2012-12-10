@@ -15,14 +15,14 @@ class Bimatrix:
 	# any action pair that has a chance of the agents running into each other is given
 	#	coco value (-inf, -inf) because we just never want that to happen.
 	# it's stored in a dict accessible by action tuples
-	def __init__(self, _entries=None):
-		if(_entries == None):
+	def __init__(self, _entries):
+		"""if(_entries == None):
 			self.entries={}
 			for a1 in ["up","down","left","right","stay"]:
 				for a2 in ["up","down","left","right","stay"]:
 					self.entries[(a1,a2)] = numpy.array([0.0,0.0])
-		else:
-			self.entries = _entries
+		else:"""
+		self.entries = _entries
 	
 	# coopVal() -> (float,float)
 	# gives the cooperative (i.e. max-max of the cooperative matrix) value of the bimatrix

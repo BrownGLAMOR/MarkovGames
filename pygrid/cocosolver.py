@@ -21,8 +21,8 @@ class CocoSolver:
 			newV = {}
 			allStates = self.grid.allStates()
 			for st in allStates:
-				argmaxmaxA = st.bimatrix(self.V).coopAction()
-				newV[(st.getPosA(),st.getPosB())] = numpy.array([self.grid.stepcost,self.grid.stepcost]) + st.expectedReward(argmaxmaxA) + self.gamma*st.expectedCocoValue(argmaxmaxA, self.V)
+				argmaxmaxA = st.bimatrix(self.V, self.gamma).coopAction()
+				newV[(st.getPosA(),st.getPosB())] = st.bimatrix(self.V, self.gamma).cocoVal()
 				self.P[(st.getPosA(), st.getPosB())] = argmaxmaxA
 			self.V = newV
 	#

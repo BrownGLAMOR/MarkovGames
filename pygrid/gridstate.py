@@ -58,10 +58,10 @@ class GridState:
 			newB = self.posB
 		return GridState(newA,newB,self.grid)
 	#			
-	# getReward() -> numpy.array([float,float])
-	# returns the immediate reward arising from this state
-	def getReward(self):
-		if numpy.array_equal(self.posA, self.posB): return numpy.array([-1,-1])
+	# getReward(GridState) -> numpy.array([float,float])
+	# returns the immediate reward arising from this state, given the previous state
+	def getReward(self, prevState):
+		if numpy.array_equal(self.posA, self.posB) or (numpy.array_equal(prevState.posA, self.posB) and numpy.array_equal(prevState.posB, self.posA)): return numpy.array([-1,-1])
 		else: return numpy.array([self.grid.getSquare(self.posA).attr["goal_a"], self.grid.getSquare(self.posB).attr["goal_b"]])
 	#
 	# possibleResultantStates(string tuple) -> list of (GridState, float in [0,1])
@@ -110,7 +110,7 @@ class GridState:
 		possibleStates = self.possibleResultantStates(actions)
 		val = numpy.array([0,0])
 		for i in possibleStates:
-			if numpy.array_equal(i[0].posA, i[0].posB): val += i[1]*self.bimatrix(V).cocoVal()
+			if numpy.array_equal(i[0].posA, i[0].posB) or (numpy.array_equal(i[0].posA, self.posB) and numpy.array_equal(i[0].posB, self.posA)): val += i[1]*self.bimatrix(V).cocoVal()
 			else: val += i[1]*i[0].bimatrix(V).cocoVal()
 		return val
 	# expectedValue(string tuple, (V: dict from (numpy.array([int,int]), numpy.array([int,int])) to numpy.array([float,float])) -> (float,float)
@@ -119,7 +119,7 @@ class GridState:
 		possibleStates = self.possibleResultantStates(actions)
 		val = numpy.array([0,0])
 		for i in possibleStates:
-			if numpy.array_equal(i[0].posA, i[0].posB): val += i[1]*V[(self.getPosA(), self.getPosB())]
+			if numpy.array_equal(i[0].posA, i[0].posB) or (numpy.array_equal(i[0].posA, self.posB) and numpy.array_equal(i[0].posB, self.posA)): val += i[1]*V[(self.getPosA(), self.getPosB())]
 			else: val += V[(i[0].getPosA(), i[0].getPosB())]*i[1]
 		return val	
 	
@@ -129,18 +129,21 @@ class GridState:
 		possibleStates = self.possibleResultantStates(actions)
 		rew = numpy.array([0,0])
 		for i in possibleStates:
-			rew += i[0].getReward()*i[1]
+			rew += i[0].getReward(self)*i[1]
 		return rew
 			
 	# bimatrix (V: dict from (posA, posB) to numpy.array([float,float])) -> Bimatrix
 	# returns the bimatrix of values associated with this state
 	# each entry is the expected cocovalue of the resulting state, using values from V and transition probabilities given by the grid
 	# if an action pair could possibly result in the agents running into each other, the entry is (-inf, -inf)
-	def bimatrix(self, V):
+	def bimatrix(self, V, gamma):
 		mat = {}
 		for action1 in ["up","down","left","right","stay"]:
 			for action2 in ["up","down","left","right","stay"]:
-				mat[(action1,action2)] = self.expectedValue((action1,action2), V)
+				step_penalty = numpy.array([self.grid.stepcost,self.grid.stepcost])
+				if action1 == "stay": step_penalty[0] = 0
+				if action2 == "stay": step_penalty[1] = 0
+				mat[(action1,action2)] = step_penalty + self.expectedReward((action1, action2)) + gamma*self.expectedValue((action1,action2), V)
 		return bimatrix.Bimatrix(mat)
 	#
 	# toString () -> String
@@ -154,9 +157,14 @@ class GridState:
 				currSquare = self.grid.getSquare((x,y))
 				if numpy.array_equal(self.posA, numpy.array([x,y])):
 					ret += "A"
+					if(currSquare.attr["goal_a"] != 0.0 or currSquare.attr["goal_b"] != 0.0):
+						refs["square A occupies"] = currSquare
 				elif numpy.array_equal(self.posB, numpy.array([x,y])):
 					ret += "B"
+					if(currSquare.attr["goal_a"] != 0.0 or currSquare.attr["goal_b"] != 0.0):
+						refs["square B occupies"] = currSquare
 				elif currSquare.isNormal():ret += "N"
+				elif currSquare.reachable == False: ret += "X"
 				else: 
 					ret+=str(sq_id)
 					refs[sq_id] = currSquare
