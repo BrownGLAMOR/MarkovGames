@@ -3,11 +3,12 @@ import gridstate
 import gridsquare
 import bimatrix
 import cocosolver
+import sys
 
 ITERATIONS=5
 def main():
 	print "loading grid"
-	testgrid = grid.Grid("test.grid")
+	testgrid = grid.Grid(sys.argv[1])
 	print "grid loaded"
 	print "creating solver"
 	solver = cocosolver.CocoSolver(testgrid, 0.8)

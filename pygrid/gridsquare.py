@@ -28,7 +28,7 @@ class GridSquare:
 	# isNormal() -> bool
 	# tells if there's anything abnormal about it
 	def isNormal(self):
-		return self.attr["wall_up"] == 1.0 and self.attr["wall_down"] == 1.0 and self.attr["wall_left"] == 1.0 and self.attr["wall_right"] == 1.0 and self.attr["goal_a"] == 0.0 and self.attr["goal_b"] == 0.0 and self.attr["start_a"] == False and self.attr["start_b"] == False
+		return self.attr["wall_up"] == 1.0 and self.attr["wall_down"] == 1.0 and self.attr["wall_left"] == 1.0 and self.attr["wall_right"] == 1.0 and self.attr["goal_a"] == 0.0 and self.attr["goal_b"] == 0.0 and self.attr["start_a"] == False and self.attr["start_b"] == False and self.reachable == True
 	#
 	# abnormalAttrs() -> String
 	# prints a string representation of everything "abnormal" about this state
