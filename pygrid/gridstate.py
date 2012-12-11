@@ -68,41 +68,44 @@ class GridState:
 	# returns a list of tuples of resultant states and their associated probabilities given that agents take the two given actions
 	#
 	def possibleResultantStates(self, actions):
-		a = [actions[0], actions[1]]
-		if actions[0] == "left" and not self.grid.isSquare(self.posA + numpy.array([-1,0])):
-			a[0] = "stay"
-		if actions[0] == "right" and not self.grid.isSquare(self.posA + numpy.array([1,0])):
-			a[0] = "stay"
-		if actions[0] == "up" and not self.grid.isSquare(self.posA + numpy.array([0,-1])):
-			a[0] = "stay"
-		if actions[0] == "down" and not self.grid.isSquare(self.posA + numpy.array([0,1])):
-			a[0] = "stay"
-		if actions[1] == "left" and not self.grid.isSquare(self.posB + numpy.array([-1,0])):
-			a[1] = "stay"
-		if actions[1] == "right" and not self.grid.isSquare(self.posB + numpy.array([1,0])):
-			a[1] = "stay"
-		if actions[1] == "up" and not self.grid.isSquare(self.posB + numpy.array([0,-1])):
-			a[1] = "stay"
-		if actions[1] == "down" and not self.grid.isSquare(self.posB + numpy.array([0,1])):
-			a[1] = "stay"
-	
-		if a == ["stay","stay"]:
-			return [(self, 1.0)]
+		if self.grid.getSquare(self.posA).attr["goal_a"] == 0 and self.grid.getSquare(self.posB).attr["goal_b"] == 0:
+			a = [actions[0], actions[1]]
+			if actions[0] == "left" and not self.grid.isSquare(self.posA + numpy.array([-1,0])):
+				a[0] = "stay"
+			if actions[0] == "right" and not self.grid.isSquare(self.posA + numpy.array([1,0])):
+				a[0] = "stay"
+			if actions[0] == "up" and not self.grid.isSquare(self.posA + numpy.array([0,-1])):
+				a[0] = "stay"
+			if actions[0] == "down" and not self.grid.isSquare(self.posA + numpy.array([0,1])):
+				a[0] = "stay"
+			if actions[1] == "left" and not self.grid.isSquare(self.posB + numpy.array([-1,0])):
+				a[1] = "stay"
+			if actions[1] == "right" and not self.grid.isSquare(self.posB + numpy.array([1,0])):
+				a[1] = "stay"
+			if actions[1] == "up" and not self.grid.isSquare(self.posB + numpy.array([0,-1])):
+				a[1] = "stay"
+			if actions[1] == "down" and not self.grid.isSquare(self.posB + numpy.array([0,1])):
+				a[1] = "stay"
+		
+			if a == ["stay","stay"]:
+				return [(self, 1.0)]
+			else:
+				probA=1.0
+				probB=1.0
+				if a[0] != "stay": probA=self.grid.getSquare(self.posA).attr["wall_"+a[0]]
+				if a[1] != "stay": probB=self.grid.getSquare(self.posB).attr["wall_"+a[1]]
+				ret = []
+				# case 1: they both fail
+				ret.append((self,(1.0-probA)*(1.0-probB)))
+				# case 2: they both succeed
+				ret.append((self.rawNextState(a[0],a[1]), probA*probB))
+				# case 3: A succeeds, B fails
+				ret.append((self.rawNextState(a[0],"stay"), probA*(1.0-probB)))
+				# case 4: A fails, B succeeds
+				ret.append((self.rawNextState("stay",a[1]), (1.0-probA)*probB))
+			return ret
 		else:
-			probA=1.0
-			probB=1.0
-			if a[0] != "stay": probA=self.grid.getSquare(self.posA).attr["wall_"+a[0]]
-			if a[1] != "stay": probB=self.grid.getSquare(self.posB).attr["wall_"+a[1]]
-			ret = []
-			# case 1: they both fail
-			ret.append((self,(1.0-probA)*(1.0-probB)))
-			# case 2: they both succeed
-			ret.append((self.rawNextState(a[0],a[1]), probA*probB))
-			# case 3: A succeeds, B fails
-			ret.append((self.rawNextState(a[0],"stay"), probA*(1.0-probB)))
-			# case 4: A fails, B succeeds
-			ret.append((self.rawNextState("stay",a[1]), (1.0-probA)*probB))
-		return ret
+			return []
 	#
 	# expectedCocoValue(string tuple, (V: dict from (numpy.array([int,int]), numpy.array([int,int])) to numpy.array([float,float])) -> (float,float)
 	# returns the expected coco value from taking the two given actions using the state value "guesses" given in V

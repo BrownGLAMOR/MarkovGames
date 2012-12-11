@@ -1,0 +1,9 @@
+AB
+NN
+CD
+END
+stepcost:-0.1
+A:start_a=True
+B:start_b=True;goal_a=100.0
+C:goal_a=800.0
+D:goal_b=800.0

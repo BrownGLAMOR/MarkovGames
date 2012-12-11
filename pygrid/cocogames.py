@@ -7,6 +7,8 @@ import sys
 
 ITERATIONS=5
 def main():
+	if len(sys.argv)>=3:
+		ITERATIONS=int(sys.argv[2])
 	print "loading grid"
 	testgrid = grid.Grid(sys.argv[1])
 	print "grid loaded"
