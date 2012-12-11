@@ -1,8 +1,7 @@
-XNNXXXX
-HANBNNG
+XXXNXXX
+ANNNNBG
 END
 stepcost:-0.1
 A:start_a=True
 B:start_b=True
-G:goal_a=1000.0
-H:goal_b=500.0
+G:goal_a=500.0;goal_b=100.0

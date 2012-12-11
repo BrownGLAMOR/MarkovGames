@@ -1,0 +1,10 @@
+NGN
+CND
+ANB
+END
+stepcost:-0.1
+A:start_a=True;wall_up=0.5
+B:start_b=True;wall_up=0.5
+C:wall_down=0.5
+D:wall_down=0.5
+G:goal_a=300.0;goal_b=100.0

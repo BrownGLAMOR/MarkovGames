@@ -1,7 +1,0 @@
-GABNH
-END
-stepcost:-0.0
-A:start_a=True
-B:start_b=True
-G:goal_a=100.0
-H:goal_b=1000.0

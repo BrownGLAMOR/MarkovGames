@@ -1,8 +1,10 @@
 AB
-GH
+NH
+NN
+XG
 END
 stepcost:-0.1
-A:start_a=True;goal_b=100.0
+A:start_a=True
 B:start_b=True;goal_a=100.0
-G:goal_b=100.0
 H:goal_a=100.0
+G:goal_b=300.0

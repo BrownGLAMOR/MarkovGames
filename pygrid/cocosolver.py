@@ -13,10 +13,13 @@ class CocoSolver:
 			self.V[(st.getPosA(), st.getPosB())] = numpy.array([0.0,0.0])
 			self.P[(st.getPosA(), st.getPosB())] = ("stay", "stay")
 	
-	# iterateV (n: int) -> void
+	# iterateV (n: int) -> float list
 	# iteratively computes V to "solve" the game
+	# returns a list of iteration differences (i.e. convergence metric) where the ith entry is (iteration i) - (iteration i-1), where iteration 0 is the initial state
 	def iterateV(self, n):
 		max_diff = []
+		for i in range(0,n):
+			max_diff.append(0)
 		for i in range(0,n):
 			print("iteration "+str(i))
 			newV = {}
@@ -28,12 +31,12 @@ class CocoSolver:
 			max_d = 0
 			for key in newV:
 				max_d = max(max_d, abs(newV[key][0] - self.V[key][0]), abs(newV[key][1] - self.V[key][1]))
-			max_diff.append(max_d)
+			max_diff[i] = max_d
 			self.V = newV
-		print "CONVERGENCE: "+str(max_diff)
+		return max_diff
 	#
 	# printP(n:int) -> void
-	# visualizes the learned policy to n steps
+	# visualizes the learned policy to n steps (or until it naturally terminates)
 	def printP(self, n):
 		currState = gridstate.GridState(self.grid.start_a.pos, self.grid.start_b.pos, self.grid)
 		for i in range(0,n):

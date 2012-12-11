@@ -1,8 +1,0 @@
-AB
-CD
-END
-stepcost:-0.1
-A:start_a=True;goal_b=100.0
-B:start_b=True;goal_a=100.0
-C:goal_b=100.0
-D:goal_a=100.0

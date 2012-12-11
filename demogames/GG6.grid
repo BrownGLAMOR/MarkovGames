@@ -1,7 +1,7 @@
-ABNGNHN
+ABNGNNH
 END
 stepcost:-0.1
 A:start_a=True
 B:start_b=True
 G:goal_a=100.0
-H:goal_b=200.0
+H:goal_b=300.0
