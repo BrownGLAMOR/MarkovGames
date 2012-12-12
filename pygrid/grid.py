@@ -31,7 +31,7 @@ class Grid:
 				ident=line.split(":")[0]
 				info=line.split(":")[1]
 				if ident=="stepcost":
-					self.stepcost = float(info)
+					self.stepcost = 0#float(info)
 				else:
 					settings=[s.split("=")[0] for s in info.split(";")]
 					if "start_a" in settings: self.start_a = references[ident]

@@ -3,11 +3,13 @@ import grid
 import gridsquare
 import bimatrix
 import random
+from Tkinter import *
 class GridState:
 	def __init__(self, _posA, _posB, _grid):
 		self.posA=_posA
 		self.posB=_posB
 		self.grid=_grid
+		self.tkinter_ovals=[]
 	
 	# rawNextState (actionA:string, actionB:string) -> GridState
 	# returns the state arising from taking those two actions, assuming they both succeed
@@ -177,6 +179,18 @@ class GridState:
 			ret += str(key)+": "+refs[key].abnormalAttrs()+"\n"
 		return ret
 	#
+	# renderSelf (Tk) -> Canvas
+	# takes a reference to the tk root and draws self in it, then returns canvas
+	def renderSelf(self, root):
+		self.tkinter_ovals = []
+		canvas = Canvas(root, width=max(gridsquare.GridSquare().size*self.grid.width, 500), height=gridsquare.GridSquare().size*self.grid.height + 400)
+		canvas.pack(fill=BOTH)
+		for y in range(0, self.grid.height):
+			for x in range(0,self.grid.width):
+				self.grid.getSquare((x,y)).renderSelf(canvas)
+		
+		return canvas
+	
 	# getters
 	def getPosA(self):
 		return (self.posA[0], self.posA[1])

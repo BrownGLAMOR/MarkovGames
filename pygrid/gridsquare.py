@@ -1,6 +1,7 @@
 import numpy
+from Tkinter import *
 class GridSquare:
-	def __init__(self, x, y):
+	def __init__(self, x=0, y=0):
 		self.pos=numpy.array([x,y])
 		self.attr={}
 		self.attr["wall_up"]=1.0
@@ -12,6 +13,7 @@ class GridSquare:
 		self.attr["start_a"]=False
 		self.attr["start_b"]=False
 		self.reachable=True
+		self.size=90
 	
 	# setInfo (config_str: String) -> void
 	# takes a configuration string (as from a config file) and uses it to configure this square
@@ -43,4 +45,23 @@ class GridSquare:
 		if self.attr["start_a"]!=False: ret += "start_a = "+str(self.attr["start_a"])+"; "
 		if self.attr["start_b"]!=False: ret += "start_b = "+str(self.attr["start_b"])+"; "
 		return ret
+	# renderSelf (Canvas) (Tk) -> void
+	# takes a reference to the tk canvas and draws self in it
+	def renderSelf(self, canvas):
+		if self.reachable == False: canvas.create_rectangle(self.size*self.pos[0], self.size*self.pos[1], self.size*(self.pos[0]+1), self.size*(self.pos[1]+1), fill="gray")
+		else:
+			if self.attr["goal_a"] != 0 or self.attr["goal_b"] != 0:
+				canvas.create_rectangle(self.size*self.pos[0], self.size*self.pos[1], self.size*(self.pos[0]+1), self.size*(self.pos[1]+1), fill="yellow")
+				goal_text = ""
+				if self.attr["goal_a"] != 0: goal_text += "A: "+str(self.attr["goal_a"])+"\n"
+				if self.attr["goal_b"] != 0: goal_text += "B: "+str(self.attr["goal_b"])
+				canvas.create_text(self.size*(self.pos[0] + 0.5), self.size*(self.pos[1] + 0.5), text=goal_text, fill="black", font=("Helvetica","15"))
+			else:
+				canvas.create_rectangle(self.size*self.pos[0], self.size*self.pos[1], self.size*(self.pos[0]+1), self.size*(self.pos[1]+1), fill="white")
+			if self.attr["wall_up"]!=1.0: canvas.create_line(self.size*self.pos[0], self.size*self.pos[1], self.size*(self.pos[0]+1), self.size*self.pos[1], fill="turquoise", width=4, dash=(int(5*(1-self.attr["wall_up"])), int(5*self.attr["wall_up"])))
+			if self.attr["wall_down"]!=1.0: canvas.create_line(self.size*self.pos[0], self.size*(self.pos[1]+1), self.size*(self.pos[0]+1), self.size*(self.pos[1]+1), fill="turquoise", width=4, dash=(int(5*(1-self.attr["wall_down"])), int(5*self.attr["wall_down"])))
+			if self.attr["wall_left"]!=1.0: canvas.create_line(self.size*self.pos[0], self.size*self.pos[1], self.size*self.pos[0], self.size*(self.pos[1]+1), fill="turquoise", width=4, dash=(int(5*(1-self.attr["wall_left"])), int(5*self.attr["wall_left"])))
+			if self.attr["wall_right"]!=1.0: canvas.create_line(self.size*(self.pos[0]+1), self.size*self.pos[1], self.size*(self.pos[0]+1), self.size*(self.pos[1]+1), fill="turquoise", width=4, dash=(int(5*(1-self.attr["wall_right"])), int(5*self.attr["wall_right"])))
+		
+	
 				

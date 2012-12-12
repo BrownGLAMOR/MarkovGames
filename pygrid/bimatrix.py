@@ -1,4 +1,5 @@
 import numpy
+from operator import add,neg
 class Bimatrix:
 	# a bimatrix looks like this:
 	# 
@@ -36,7 +37,7 @@ class Bimatrix:
 			if(coopMat[key] > max_val):
 				max_key = key
 				max_val = coopMat[max_key]
-		return max_val
+		return numpy.array([max_val,max_val])
 	#
 	# coopAction() -> (string, string)
 	# gives the (rowAction, colAction) string tuple which leads to the max-max
@@ -55,10 +56,11 @@ class Bimatrix:
 	# compVal() -> (float,float)
 	# gives the competitive (i.e. min-max of the competitive matrix) value of the bimatrix
 	def compVal(self):
+		
 		compMat = {}
 		for key in self.entries:
 			tmp = (self.entries[key][0] - self.entries[key][1])/2.0
-			compMat[key] = (tmp,-tmp)
+			compMat[key] = numpy.array([tmp,-tmp])
 		actionA = ""
 		rowRewards = {}
 		for a in ["up","down","left","right","stay"]:
@@ -84,8 +86,22 @@ class Bimatrix:
 				actionB = b
 				mincolval = colRewards[b]
 		return compMat[(actionA, actionB)]
+		
 	#
 	# cocoVal() -> (float, float)
 	# gives the coco value of the bimatrix
 	def cocoVal(self):
 		return self.coopVal() + self.compVal()
+		
+	#
+	# stringOfDecomposition() -> string
+	# gives a string representing the bimatrix, the coco decomposition of the bimatrix, and the coco value
+	def stringOfDecomposition(self):
+		ret = "\t\tu\t\td\t\tl\t\tr\t\ts\n"
+		ret += "\tu\t"+str(self.entries[("up","up")])+"\t"+str(self.entries[("up","down")])+"\t"+str(self.entries[("up","left")])+"\t"+str(self.entries[("up","right")])+"\t"+str(self.entries[("up","stay")])+"\n"
+		ret += "\td\t"+str(self.entries[("down","up")])+"\t"+str(self.entries[("down","down")])+"\t"+str(self.entries[("down","left")])+"\t"+str(self.entries[("down","right")])+"\t"+str(self.entries[("down","stay")])+"\n"
+		ret += "\tl\t"+str(self.entries[("left","up")])+"\t"+str(self.entries[("left","down")])+"\t"+str(self.entries[("left","left")])+"\t"+str(self.entries[("left","right")])+"\t"+str(self.entries[("left","stay")])+"\n"
+		ret += "\tr\t"+str(self.entries[("right","up")])+"\t"+str(self.entries[("right","down")])+"\t"+str(self.entries[("right","left")])+"\t"+str(self.entries[("right","right")])+"\t"+str(self.entries[("right","stay")])+"\n"
+		ret += "\ts\t"+str(self.entries[("stay","up")])+"\t"+str(self.entries[("stay","down")])+"\t"+str(self.entries[("stay","left")])+"\t"+str(self.entries[("stay","right")])+"\t"+str(self.entries[("stay","stay")])+"\n"
+		ret += "\n\t\tCocoValue: "+str(self.cocoVal())+" = "+str(self.coopVal())+" + "+str(self.compVal())+"\n"
+		return ret

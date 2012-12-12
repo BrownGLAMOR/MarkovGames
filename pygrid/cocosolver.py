@@ -3,6 +3,8 @@ import grid
 import gridstate
 import bimatrix
 import gridsquare
+import simstate
+from Tkinter import *
 class CocoSolver:
 	def __init__(self, _grid, _gamma):
 		self.grid = _grid
@@ -35,9 +37,21 @@ class CocoSolver:
 			self.V = newV
 		return max_diff
 	#
+	# simulate (self) -> list of SimState
+	# simulates learned policy until it terminates. Outputs list of associated gridstates
+	def simulate(self):
+		currState = gridstate.GridState(self.grid.start_a.pos, self.grid.start_b.pos, self.grid)
+		ret = [simstate.SimState(currState, self.V[(currState.getPosA(), currState.getPosB())])]
+		for i in range(0,100):
+			if self.grid.getSquare(currState.getPosA()).attr["goal_a"]!=0.0 or self.grid.getSquare(currState.getPosB()).attr["goal_b"]!=0.0: break
+			policy = self.P[(currState.getPosA(), currState.getPosB())]
+			currState = currState.nextState(policy[0],policy[1])
+			ret.append(simstate.SimState(currState, self.V[(currState.getPosA(), currState.getPosB())]))
+		return ret
+	#		
 	# printP(n:int) -> void
 	# visualizes the learned policy to n steps (or until it naturally terminates)
-	def printP(self, n):
+	def printP(self, n):		
 		currState = gridstate.GridState(self.grid.start_a.pos, self.grid.start_b.pos, self.grid)
 		for i in range(0,n):
 			print currState.toString()
